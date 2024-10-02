@@ -22,7 +22,7 @@ namespace Evaluacion2.Controllers
             return Ok(usuarios);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{Id}")]
         public async Task<IActionResult> GetUsuario(int id)
         {
             var usuario = await _usuariosServices.ObtenerUsuarioPorId(id);
@@ -36,14 +36,14 @@ namespace Evaluacion2.Controllers
             return Ok("Usuario creado exitosamente");
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{Id}")]
         public async Task<IActionResult> ActualizarUsuario(int id, [FromBody] UsuarioDTO usuarioDTO)
         {
             var resultado = await _usuariosServices.ActualizarUsuario(id, usuarioDTO);
             return Ok("Usuario actualizado exitosamente");
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{Id}")]
         public async Task<IActionResult> EliminarUsuario(int id)
         {
             var resultado = await _usuariosServices.EliminarUsuario(id);

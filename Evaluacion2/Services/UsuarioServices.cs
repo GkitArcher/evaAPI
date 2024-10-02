@@ -1,34 +1,33 @@
-﻿using Evaluacion2.Models;
+﻿using Evaluacion2.Data;
+using Evaluacion2.Models;
 using Evaluacion2.DTO;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Evaluacion2.Services
 {
     public class UsuariosServices
     {
-        private List<Usuario> usuarios = new List<Usuario>
-        {
-            new Usuario { Id = 1, 
-                Nombre = "Usuario A", 
-                Email = "usuarioA@mail.com", 
-                Password = "alumnocft", 
-                RolId = 1 },
+        private readonly ProyectoDBContext _context;
 
-            new Usuario { Id = 2, 
-                Nombre = "Usuario B", 
-                Email = "usuarioB@mail.com", 
-                Password = "cftsa2024", 
-                RolId = 2 }
-        };
-
-        public async Task<List<Usuario>> ObtenerUsuarios()
+        
+        public UsuariosServices(ProyectoDBContext context)
         {
-            return await Task.FromResult(usuarios);
+            _context = context;
         }
 
+        
+        public async Task<List<Usuario>> ObtenerUsuarios()
+        {
+            return await _context.Usuarios.ToListAsync();
+        }
+
+        
         public async Task<Usuario> ObtenerUsuarioPorId(int id)
         {
-            var usuario = usuarios.FirstOrDefault(u => u.Id == id);
-            return usuario;
+            return await _context.Usuarios.FindAsync(id);
         }
 
         
@@ -36,40 +35,45 @@ namespace Evaluacion2.Services
         {
             var nuevoUsuario = new Usuario
             {
-                Id = usuarios.Max(u => u.Id) + 1,
                 Nombre = usuarioDTO.Nombre,
                 Email = usuarioDTO.Email,
                 Password = usuarioDTO.Password,
                 RolId = usuarioDTO.RolId
             };
 
-            usuarios.Add(nuevoUsuario);
-            return true; 
+            _context.Usuarios.Add(nuevoUsuario);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
+        
         public async Task<bool> ActualizarUsuario(int id, UsuarioDTO usuarioDTO)
         {
-            var usuarioExistente = usuarios.FirstOrDefault(u => u.Id == id);
+            var usuarioExistente = await _context.Usuarios.FindAsync(id);
             if (usuarioExistente != null)
             {
                 usuarioExistente.Nombre = usuarioDTO.Nombre;
                 usuarioExistente.Email = usuarioDTO.Email;
                 usuarioExistente.Password = usuarioDTO.Password;
                 usuarioExistente.RolId = usuarioDTO.RolId;
-                return await Task.FromResult(true);
-            }
-            return false; 
-        }
 
-        public async Task<bool> EliminarUsuario(int id)
-        {
-            var usuarioExistente = usuarios.FirstOrDefault(u => u.Id == id);
-            if (usuarioExistente != null)
-            {
-                usuarios.Remove(usuarioExistente);
+                await _context.SaveChangesAsync();
                 return true;
             }
-            return false; 
+            return false;
+        }
+
+        
+        public async Task<bool> EliminarUsuario(int id)
+        {
+            var usuarioExistente = await _context.Usuarios.FindAsync(id);
+            if (usuarioExistente != null)
+            {
+                _context.Usuarios.Remove(usuarioExistente);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

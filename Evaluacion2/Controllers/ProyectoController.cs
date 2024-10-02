@@ -2,17 +2,16 @@
 using Evaluacion2.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Evaluacion2.DTO;
-
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Evaluacion2.Controllers
 {
-
     [ApiController]
     [Route("ApiEvaluacion/[controller]")]
-    public class ProyectoController : Controller
+    public class ProyectoController : ControllerBase
     {
         private readonly ProyectoServices _proyectoServices;
-
 
         public ProyectoController(ProyectoServices proyectoServices)
         {
@@ -22,7 +21,7 @@ namespace Evaluacion2.Controllers
         [HttpGet]
         public async Task<ActionResult<ProyectosResponses>> GetProyectos()
         {
-            var pro = await _proyectoServices.ListaProyectos();
+            var pro = await _proyectoServices.ObtenerProyectosAsync();
 
             var response = new ProyectosResponses
             {
@@ -37,7 +36,12 @@ namespace Evaluacion2.Controllers
         [HttpGet("{Id}")]
         public async Task<ActionResult<ProyectoResponses>> GetProyecto(int Id)
         {
-            var proyecto = await _proyectoServices.ObtenerProyecto(Id);
+            var proyecto = await _proyectoServices.ObtenerProyectoPorIdAsync(Id); 
+
+            if (proyecto == null)
+            {
+                return NotFound(); 
+            }
 
             var response = new ProyectoResponses
             {
@@ -47,55 +51,62 @@ namespace Evaluacion2.Controllers
             };
 
             return Ok(response);
-
         }
-
 
         [HttpPost]
         public async Task<ActionResult<NuevoProyectoResponses>> PostProyecto([FromBody] ProyectoDTO proyecto)
         {
-            var ingreso = await _proyectoServices.IngresarProyecto(proyecto);
+            var nuevoProyecto = await _proyectoServices.CrearProyectoAsync(proyecto); 
 
             var response = new NuevoProyectoResponses
             {
-                Data = ingreso,
-                Code = 200,
+                Data = true,
+                Code = 201, 
                 Message = "Proyecto ingresado correctamente"
             };
 
-            return Ok(response);
+            return CreatedAtAction(nameof(GetProyecto), new { id = nuevoProyecto.Id }, response); 
         }
 
         [HttpPut("{Id}")]
         public async Task<ActionResult<ActualizarProyectoResponses>> ActualizarProyecto(int Id, [FromBody] ProyectoDTO proyecto)
         {
-            var ingreso = await _proyectoServices.ActualizarProyecto(Id, proyecto);
+            var resultado = await _proyectoServices.ActualizarProyectoAsync(Id, proyecto); 
+
+            if (!resultado)
+            {
+                return NotFound(); 
+            }
 
             var response = new ActualizarProyectoResponses
             {
-                Data = ingreso,
+                Data = true,
                 Code = 200,
-                Message = "Proyecto Actualizado correctamente"
+                Message = "Proyecto actualizado correctamente"
             };
 
             return Ok(response);
         }
 
-
         [HttpDelete("{Id}")]
-        public async Task<ActionResult<ProyectoResponses>> EliminarProyecto(int Id, ProyectoDTO proyecto)
+        public async Task<ActionResult<ProyectoResponses>> EliminarProyecto(int Id)
         {
-            var ingreso = await _proyectoServices.EliminarProyecto(Id);
+            var resultado = await _proyectoServices.EliminarProyectoAsync(Id); 
 
-            var response = new EliminarProyectoResponses
+            if (!resultado)
             {
-                Data = ingreso,
+                return NotFound(); 
+            }
+
+            var response = new ProyectoResponses
+            {
+                Data = null,
                 Code = 200,
-                Message = "Proyecto Eliminado correctamente"
+                Message = "Proyecto eliminado correctamente"
             };
 
             return Ok(response);
-
         }
     }
 }
+

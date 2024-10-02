@@ -1,5 +1,7 @@
 ﻿using Evaluacion2.Data;
 using Evaluacion2.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Evaluacion2.Services
 {
@@ -12,14 +14,17 @@ namespace Evaluacion2.Services
             _context = context;
         }
 
-        public IEnumerable<Rol> ObtenerTodosLosRoles()
+        
+        public async Task<IEnumerable<Rol>> ObtenerTodosLosRoles()
         {
-            return _context.Roles.ToList();
+            return await _context.Roles.ToListAsync();
         }
 
-        public IEnumerable<Usuario> ObtenerUsuariosPorRol(int IdRol)
+        
+        public async Task<IEnumerable<Usuario>> ObtenerUsuariosPorRol(int IdRol)
         {
-            return _context.Usuarios.Where(u => u.RolId == IdRol).ToList();
+            return await _context.Usuarios.Where(u => u.RolId == IdRol).ToListAsync();
         }
     }
 }
+

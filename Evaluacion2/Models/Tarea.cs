@@ -1,83 +1,36 @@
-﻿namespace Evaluacion2.Models
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace Evaluacion2.Models
 {
     public class Tarea
     {
         public int Id { get; set; }
-        public string Descripcion { get; set; }
-        public DateTime FechaIngreso { get; set; }
 
+        [Required(ErrorMessage = "La fecha de inicio es obligatoria.")]
         public DateTime FechaInicio { get; set; }
+
+        [Required(ErrorMessage = "El estado de la tarea es obligatorio.")]
+        [RegularExpression(@"^(Pendiente|En progreso|Finalizado)$", ErrorMessage = "Estado no válido.")]
         public string Estado { get; set; }
-        public int Responsable { get; set; }
 
+        [Required(ErrorMessage = "Las horas son obligatorias.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Las horas deben ser al menos 1.")]
+        public int Horas { get; set; }
 
-        /*simula la devolución de una tarea*/
-        public static Tarea CargarTarea()
-        {
-            return new Tarea
-            {
-                Id = 1,
-                Descripcion = "1",
-                FechaInicio = DateTime.Now,
-                FechaIngreso = DateTime.Now,
-                Estado = "Pendiente",
-                Responsable = 5,
-            };
-        }
+        [Required(ErrorMessage = "El área es obligatoria.")]
+        [RegularExpression(@"^(Hardware|Redes)$", ErrorMessage = "Área no válida.")]
+        public string Area { get; set; }
 
-        /*simula la devolución de una lista de tareas*/
+        [Required(ErrorMessage = "El ID del proyecto es obligatorio.")]
+        public int ProyectoId { get; set; }
 
-        public static List<Tarea> CargarTareas()
-        {
-            return new List<Tarea>
-            {
-                new Tarea
-                {
-                    Id = 1,
-                    Descripcion = "1",
-                    FechaInicio = DateTime.Now,
-                    FechaIngreso = DateTime.Now,
-                    Estado = "Pendiente",
-                    Responsable = 5,
-                },
-                new Tarea
-                {
-                    Id = 2,
-                    Descripcion = "2",
-                    FechaInicio = DateTime.Now,
-                    FechaIngreso = DateTime.Now,
-                    Estado = "Pendiente",
-                    Responsable = 5,
-                },
-                new Tarea
-                {
-                    Id = 3,
-                    Descripcion = "3",
-                    FechaInicio = DateTime.Now,
-                    FechaIngreso = DateTime.Now,
-                    Estado = "Pendiente",
-                    Responsable = 5,
-                },
-                new Tarea
-                {
-                    Id = 4,
-                    Descripcion = "4",
-                    FechaInicio = DateTime.Now,
-                    FechaIngreso = DateTime.Now,
-                    Estado = "Pendiente",
-                    Responsable = 5,
-                },
-                new Tarea
-                {
-                    Id = 5,
-                    Descripcion = "5",
-                    FechaInicio = DateTime.Now,
-                    FechaIngreso = DateTime.Now,
-                    Estado = "Pendiente",
-                    Responsable = 5,
-                }
-            };
-        }
+        [Required(ErrorMessage = "El ID del empleado es obligatorio.")]
+        public int EmpleadoId { get; set; }
+
+        [Required(ErrorMessage = "El set de herramientas es obligatorio.")]
+        public string SetHerramientas { get; set; }
 
     }
 }
