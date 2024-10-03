@@ -1,7 +1,8 @@
-﻿using Evaluacion2.Models;
+﻿using Evaluacion2.DTO;
+using Evaluacion2.Models;
 using Evaluacion2.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+
 
 namespace Evaluacion2.Controllers
 {
@@ -35,10 +36,34 @@ namespace Evaluacion2.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CrearTarea([FromBody] Tarea tarea)
+        public async Task<IActionResult> CrearTarea([FromBody] TareaDTO tareaDTO)
         {
-            await _tareaServices.CrearTarea(tarea);
-            return Ok("Tarea creada exitosamente.");
+            if (tareaDTO.Horas < 1)
+            {
+                return BadRequest("Las horas deben ser al menos 1.");
+            }
+
+            var tarea = new Tarea
+            {
+                FechaInicio = tareaDTO.FechaInicio,
+                Estado = tareaDTO.Estado,
+                Horas = tareaDTO.Horas,
+                Area = tareaDTO.Area,
+                ProyectoId = tareaDTO.IdProyecto,
+                EmpleadoId = tareaDTO.IdEmpleado,
+                SetHerramientas = tareaDTO.SetHerramientas
+            };
+
+            try
+            {
+                await _tareaServices.CrearTarea(tarea);
+                return Ok("Tarea creada exitosamente.");
+            }
+            catch (Exception ex)
+            {
+                
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{Id}")]

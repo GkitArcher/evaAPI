@@ -1,13 +1,12 @@
 ﻿using Evaluacion2.Models;
 using Evaluacion2.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace Evaluacion2.Controllers
 {
     [ApiController]
     [Route("ApiEvaluacion/[controller]")]
-    public class HerramientaController : Controller
+    public class HerramientaController : ControllerBase
     {
         private readonly HerramientaServices _herramientaServices;
 
@@ -60,7 +59,7 @@ namespace Evaluacion2.Controllers
             {
                 return NotFound("Herramienta no encontrada.");
             }
-            return Ok("Herramienta eliminada exitosamente.");
+            return NoContent();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Evaluacion2.Controllers
         [HttpGet]
         public async Task<ActionResult<ProyectosResponses>> GetProyectos()
         {
-            var pro = await _proyectoServices.ObtenerProyectosAsync();
+            var pro = await _proyectoServices.ObtenerProyectos();
 
             var response = new ProyectosResponses
             {
@@ -36,7 +36,7 @@ namespace Evaluacion2.Controllers
         [HttpGet("{Id}")]
         public async Task<ActionResult<ProyectoResponses>> GetProyecto(int Id)
         {
-            var proyecto = await _proyectoServices.ObtenerProyectoPorIdAsync(Id); 
+            var proyecto = await _proyectoServices.ObtenerProyectoPorId(Id); 
 
             if (proyecto == null)
             {
@@ -56,7 +56,7 @@ namespace Evaluacion2.Controllers
         [HttpPost]
         public async Task<ActionResult<NuevoProyectoResponses>> PostProyecto([FromBody] ProyectoDTO proyecto)
         {
-            var nuevoProyecto = await _proyectoServices.CrearProyectoAsync(proyecto); 
+            var nuevoProyecto = await _proyectoServices.CrearProyecto(proyecto); 
 
             var response = new NuevoProyectoResponses
             {
@@ -71,7 +71,7 @@ namespace Evaluacion2.Controllers
         [HttpPut("{Id}")]
         public async Task<ActionResult<ActualizarProyectoResponses>> ActualizarProyecto(int Id, [FromBody] ProyectoDTO proyecto)
         {
-            var resultado = await _proyectoServices.ActualizarProyectoAsync(Id, proyecto); 
+            var resultado = await _proyectoServices.ActualizarProyecto(Id, proyecto); 
 
             if (!resultado)
             {
@@ -91,7 +91,7 @@ namespace Evaluacion2.Controllers
         [HttpDelete("{Id}")]
         public async Task<ActionResult<ProyectoResponses>> EliminarProyecto(int Id)
         {
-            var resultado = await _proyectoServices.EliminarProyectoAsync(Id); 
+            var resultado = await _proyectoServices.EliminarProyecto(Id); 
 
             if (!resultado)
             {

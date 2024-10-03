@@ -22,14 +22,16 @@ namespace Evaluacion2.Controllers
             return Ok(roles);
         }
 
-        [HttpGet("{IdRol}/usuarios")]
-        public IActionResult ObtenerUsuariosPorRol(int IdRol)
+        [HttpGet("{rolId}/usuarios")]
+        public async Task<IActionResult> ObtenerUsuariosPorRol(int rolId)
         {
-            var usuarios = _rolServices.ObtenerUsuariosPorRol(IdRol);
-            if (usuarios == null)
+            var usuarios = await _rolServices.ObtenerUsuariosPorRol(rolId);
+
+            if (usuarios == null || usuarios.Count == 0)
             {
-                return NotFound();
+                return NotFound("No se encontraron usuarios para este rol.");
             }
+
             return Ok(usuarios);
         }
     }

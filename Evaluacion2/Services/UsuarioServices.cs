@@ -2,9 +2,7 @@
 using Evaluacion2.Models;
 using Evaluacion2.DTO;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace Evaluacion2.Services
 {
@@ -36,6 +34,7 @@ namespace Evaluacion2.Services
             var nuevoUsuario = new Usuario
             {
                 Nombre = usuarioDTO.Nombre,
+                Apellido = usuarioDTO.Apellido,
                 Email = usuarioDTO.Email,
                 Password = usuarioDTO.Password,
                 RolId = usuarioDTO.RolId
@@ -49,13 +48,14 @@ namespace Evaluacion2.Services
         
         public async Task<bool> ActualizarUsuario(int id, UsuarioDTO usuarioDTO)
         {
-            var usuarioExistente = await _context.Usuarios.FindAsync(id);
-            if (usuarioExistente != null)
+            var usuarioIngresado = await _context.Usuarios.FindAsync(id);
+            if (usuarioIngresado != null)
             {
-                usuarioExistente.Nombre = usuarioDTO.Nombre;
-                usuarioExistente.Email = usuarioDTO.Email;
-                usuarioExistente.Password = usuarioDTO.Password;
-                usuarioExistente.RolId = usuarioDTO.RolId;
+                usuarioIngresado.Nombre = usuarioDTO.Nombre;
+                usuarioIngresado.Apellido = usuarioDTO.Apellido;
+                usuarioIngresado.Email = usuarioDTO.Email;
+                usuarioIngresado.Password = usuarioDTO.Password;
+                usuarioIngresado.RolId = usuarioDTO.RolId;
 
                 await _context.SaveChangesAsync();
                 return true;
@@ -66,10 +66,10 @@ namespace Evaluacion2.Services
         
         public async Task<bool> EliminarUsuario(int id)
         {
-            var usuarioExistente = await _context.Usuarios.FindAsync(id);
-            if (usuarioExistente != null)
+            var usuarioIngresado = await _context.Usuarios.FindAsync(id);
+            if (usuarioIngresado != null)
             {
-                _context.Usuarios.Remove(usuarioExistente);
+                _context.Usuarios.Remove(usuarioIngresado);
                 await _context.SaveChangesAsync();
                 return true;
             }

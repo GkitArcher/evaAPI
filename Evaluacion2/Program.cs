@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ProyectoServices>();
 builder.Services.AddScoped<RolServices>();
 builder.Services.AddScoped<UsuariosServices>();
+builder.Services.AddScoped<HerramientaServices>();
+builder.Services.AddScoped<TareaServices>();
 
 builder.Services.AddControllers();
 

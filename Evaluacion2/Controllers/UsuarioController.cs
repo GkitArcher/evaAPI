@@ -43,7 +43,7 @@ namespace Evaluacion2.Controllers
             return Ok("Usuario actualizado exitosamente");
         }
 
-        [HttpDelete("{Id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> EliminarUsuario(int id)
         {
             var resultado = await _usuariosServices.EliminarUsuario(id);

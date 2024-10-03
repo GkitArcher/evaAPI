@@ -20,10 +20,12 @@ namespace Evaluacion2.Services
             return await _context.Roles.ToListAsync();
         }
 
-        
-        public async Task<IEnumerable<Usuario>> ObtenerUsuariosPorRol(int IdRol)
+
+        public async Task<List<Usuario>> ObtenerUsuariosPorRol(int rolId)
         {
-            return await _context.Usuarios.Where(u => u.RolId == IdRol).ToListAsync();
+            return await _context.Usuarios
+                .Where(u => u.RolId == rolId)
+                .ToListAsync();
         }
     }
 }
