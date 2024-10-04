@@ -44,7 +44,12 @@ namespace Evaluacion2.Services
                 errores.Add("El empleado no existe.");
             }
 
-            
+            if (!await ValidarSetHerramientas(tarea.SetHerramientas))
+            {
+                errores.Add("Una o más herramientas especificadas no existen.");
+            }
+
+
             if (errores.Count > 0)
             {
                 throw new Exception(string.Join(" ", errores)); // Juntar todos los mensajes en uno solo
